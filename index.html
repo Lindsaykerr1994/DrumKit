@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <script src="https://kit.fontawesome.com/41a1455613.js" crossorigin="anonymous"></script>
+    <title>Grizzly Drum Kit</title>
+</head>
+<body>
+    <!--<navbar>
+        <a>HipHop</a>
+        <a>Rock</a>
+        <a>Reggae</a>
+    </navbar> -->
+    <div class="drumkit hiphop">
+        <div class="pad">
+            <div data-key="65" data-num="103" class="key">
+                <kbd class="key-keyboard">A</kbd>
+                <kbd class="key-numpad d-none">7</kbd>
+                <p class="sound">clap</p>
+            </div>
+            <div data-key="83" data-num="104" class="key">
+                <kbd class="key-keyboard">S</kbd>
+                <kbd class="key-numpad d-none">8</kbd>
+                <p class="sound">hihat</p>
+            </div>
+            <div data-key="68" data-num="105" class="key">
+                <kbd class="key-keyboard">D</kbd>
+                <kbd class="key-numpad d-none">9</kbd>
+                <p class="sound">kick</p>
+            </div>
+            <div data-key="70" data-num="100" class="key">
+                <kbd class="key-keyboard">F</kbd>
+                <kbd class="key-numpad d-none">4</kbd>
+                <p class="sound">openhat</p>
+            </div>
+            <div data-key="71" data-num="101" class="key">
+                <kbd class="key-keyboard">G</kbd>
+                <kbd class="key-numpad d-none">5</kbd>
+                <p class="sound">boom</p>
+            </div>
+            <div data-key="72" data-num="102" class="key">
+                <kbd class="key-keyboard">H</kbd>
+                <kbd class="key-numpad d-none">6</kbd>
+                <p class="sound">ride</p>
+            </div>
+            <div data-key="74" data-num="97" class="key">
+                <kbd class="key-keyboard">J</kbd>
+                <kbd class="key-numpad d-none">1</kbd>
+                <p class="sound">snare</p>
+            </div>
+            <div data-key="75" data-num="98" class="key">
+                <kbd class="key-keyboard">K</kbd>
+                <kbd class="key-numpad d-none">2</kbd>
+                <p class="sound">tom</p>
+            </div>
+            <div data-key="76" data-num="99" class="key">
+                <kbd class="key-keyboard">L</kbd>
+                <kbd class="key-numpad d-none">3</kbd>
+                <p class="sound">tink</p>
+            </div>
+        </div>
+    </div>
+    <div class="switch">
+        <i id="keyboard" class="fas fa-keyboard checked"></i>
+        <i id="numpad" class="fas fa-th"></i>
+        <label>
+            <input type="checkbox" id="switch">
+            <span class="slider round"></span>
+        </label>
+    </div>
+    <div class="audio-container">
+        <audio data-key="65" data-num="103" src="samples/hiphop/Clapbox-Pitch14-f.wav"></audio>
+        <audio data-key="83" data-num="104" src="samples/hiphop/analogBully_easyhat.wav"></audio>
+        <audio data-key="68" data-num="105" src="samples/hiphop/kidGlitch_kickbass.wav"></audio> 
+        <audio data-key="70" data-num="100" src="samples/hiphop/analogBully_hat2.wav"></audio>
+        <audio data-key="71" data-num="101" src="samples/hiphop/analogBully_bassdrop.wav"></audio>
+        <audio data-key="72" data-num="102" src="samples/hiphop/analogBully_illride.wav"></audio>
+        <audio data-key="74" data-num="97" src="samples/hiphop/OuchSnare.wav"></audio>
+        <audio data-key="75" data-num="98" src="samples/hiphop/analogBully_conga.wav"></audio>
+        <audio data-key="76" data-num="99" src="samples/hiphop/Ingentek Ana4.wav"></audio>
+    </div>
+    <script>
+        const switchChange = document.getElementById('switch');
+        const iconKeyboard = document.getElementById('keyboard');
+        const iconNumPad = document.getElementById('numpad');
+        const pad = document.getElementsByClassName('pad')[0];
+        window.addEventListener('keydown', function(e){
+            if(switchChange.checked){
+                var audio = document.querySelector(`audio[data-num="${e.which}"]`);
+                var key = document.querySelector(`.key[data-num="${e.which}"]`);
+                key.classList.add('playing');
+                key.addEventListener('transitionend', removeTransition);
+            } else {
+                var audio = document.querySelector(`audio[data-key="${e.which}"]`);
+                var key = document.querySelector(`.key[data-key="${e.which}"]`);
+                key.classList.add('playing');
+                key.addEventListener('transitionend', removeTransition);
+            }
+            if(!audio) return;
+            audio.currentTime=0
+            audio.play();
+            key.classList.add('playing');
+            
+        });
+        switchChange.addEventListener('change', function(){
+            if(switchChange.checked){
+                iconKeyboard.classList.remove('checked');
+                iconNumPad.classList.add('checked');
+                pad.classList.add('numpad');
+                var boardKeys = document.querySelectorAll('.key-keyboard');
+                var numKeys = document.querySelectorAll('.key-numpad');
+                boardKeys.forEach(key => key.classList.add('d-none'));
+                numKeys.forEach(key => key.classList.remove('d-none'));
+            } else {
+                iconKeyboard.classList.add('checked');
+                iconNumPad.classList.remove('checked');
+                pad.classList.remove('numpad');
+                var boardKeys = document.querySelectorAll('.key-keyboard');
+                var numKeys = document.querySelectorAll('.key-numpad');
+                boardKeys.forEach(key => key.classList.remove('d-none'));
+                numKeys.forEach(key => key.classList.add('d-none'));
+            }
+        });
+        function removeTransition(e){
+            if(e.propertyName !== 'transform') return;
+            this.classList.remove('playing');
+        }
+    </script>
+</body>
+</html>
